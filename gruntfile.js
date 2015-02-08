@@ -7,7 +7,12 @@ module.exports = function(grunt) {
         browserify: {
             dist: {
                 files: {
-                    'build/scripts/sudoku.js': ['src/scripts/*.js']
+                    'build/scripts/sudoku.js': [
+                        'src/templates/compiled/*.js',
+                        'src/scripts/*.js'
+                    ]
+                },
+                options: {
                 }
             }
         },
@@ -19,32 +24,49 @@ module.exports = function(grunt) {
             }
         },
 
+        copy: {
+            main: {
+                files: [
+                    { src: ['**/*.html'], dest: 'build/', expand: true, cwd: 'src/html'},
+                    { src: ['jade-runtime.js'], dest: 'build/scripts', expand: true, cwd: 'src/scripts'}
+                ]
+            }
+        },
+
         jade: {
             compile: {
                 options: {
-                    data: {
-                        debug: false
-                    },
-                    pretty: true
+                    client: true,
+                    namespace: 'Templates',
+                    processName: function(filename) {
+                        return filename.substring(14, filename.length - 5).toLowerCase();
+                    }
                 },
                 files: {
-                    'build/index.html': ['src/templates/index.jade']
+                    'src/templates/compiled/templates.js': ['src/templates/*.jade']
                 }
             }
         },
 
         watch: {
+            grunt: {
+                files: ['./gruntfile.js']
+            },
             browserify: {
                 files: ['src/scripts/*.js'],
-                tasks: ['default']
+                tasks: ['browserify']
             },
             jade: {
                 files: ['src/templates/*.jade'],
-                tasks: ['default']
+                tasks: ['jade']
             },
             concat: {
                 files: ['src/styles/**/*.css'],
-                tasks: ['default']
+                tasks: ['concat']
+            },
+            copy: {
+                files: ['src/html/index.html'],
+                tasks: ['copy']
             }
         }
     });
@@ -52,10 +74,14 @@ module.exports = function(grunt) {
     // load required npm task modules
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jade');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // $ grunt || $ grunt default
-    grunt.registerTask('default', ['browserify', 'jade', 'concat', 'watch']);
+    grunt.registerTask('default', ['jade', 'concat', 'copy', 'browserify', 'watch']);
+
+    // $ grunt build
+    grunt.registerTask('build', ['jade', 'concat', 'copy', 'browserify']);
 
 };
