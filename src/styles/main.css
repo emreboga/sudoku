@@ -1,0 +1,33 @@
+body {
+    background-color: #1a1a1a;
+    border-color: #FFFFFF;
+    color: #FFFFFF;
+    font-size: 18px;
+}
+
+.main {
+    height: 600px;
+    width: 600px;
+    margin: 0px auto;
+}
+
+.main table {
+    width: 100%;
+    height: 100%;
+}
+
+.main>table {
+    margin: 10% 0;
+}
+.main>table>tbody>tr>td {
+    padding: 0;
+}
+
+/* pure-css overrides */
+.pure-table td {
+    text-align: center;
+}
+.pure-table-bordered tbody > tr:last-child td,
+.pure-table-horizontal tbody > tr:last-child td {
+    border-bottom-width: 1px;
+}
