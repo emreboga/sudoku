@@ -13,7 +13,7 @@ var jade_interp;
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -21,7 +21,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -52,7 +52,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -60,7 +60,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -83,7 +83,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -91,7 +91,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -137,7 +137,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -145,7 +145,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -168,7 +168,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -176,7 +176,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -214,7 +214,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -222,7 +222,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -245,7 +245,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -253,7 +253,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -314,7 +314,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -322,7 +322,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -345,7 +345,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -353,176 +353,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tbody></table></td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["st-" + (val) + ""], [true])) + "><table class=\"pure-table\"><tbody>");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tbody></table></td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["st-" + (val) + ""], [true])) + "><table class=\"pure-table\"><tbody>");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -560,7 +391,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -568,7 +399,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -591,7 +422,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -599,7 +430,176 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tbody></table></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["st-" + (val) + ""], [true])) + "><table class=\"pure-table\"><tbody>");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tbody></table></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["st-" + (val) + ""], [true])) + "><table class=\"pure-table\"><tbody>");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }

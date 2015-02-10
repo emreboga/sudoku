@@ -1,11 +1,13 @@
-// game.js
-
-var $ = require('jquery');
+// sudoku_game.js
 
 var model = require('./sudoku-model.js');
 var view = require('./sudoku-view.js');
-var solver = require('./sudoku-solver.js');
 var templates = require('../templates/compiled/templates.js').Templates;
 
+// generate the html table for the board
 $('.main').html(templates.table());
-view.render(model.generateBoard());
+
+// initialize the view with a model
+view.init(model);
+// render the view to start the game
+view.render();

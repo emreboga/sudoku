@@ -1670,6 +1670,30 @@ body {
     font-size: 18px;
 }
 
+input[type=number] {
+    width: 100%;
+    height: 75%;
+    /* Override input appearence */
+    text-align: center;
+    background-color: #1a1a1a;
+    color: #FFFFFF;
+    padding: 0;
+    border: none;
+    outline: none;
+    -moz-appearance:textfield;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    /* Override input css to remove spinners*/
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.invalid-entry {
+    border: 1px solid red;
+}
+
 .main {
     height: 600px;
     width: 600px;
@@ -1682,10 +1706,15 @@ body {
 }
 
 .main>table {
+    table-layout: fixed;
     margin: 10% 0;
 }
 .main>table>tbody>tr>td {
     padding: 0;
+}
+
+.main>table>tbody>tr>td table {
+    table-layout: fixed;
 }
 
 /* pure-css overrides */

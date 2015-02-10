@@ -9255,9 +9255,10 @@ var solver = require('./sudoku-solver.js');
 var templates = require('../templates/compiled/templates.js').Templates;
 
 $('.main').html(templates.table());
-view.render(model.generateBoard());
+view.init(model);
+view.render();
 
-},{"../templates/compiled/templates.js":10,"./sudoku-model.js":6,"./sudoku-solver.js":7,"./sudoku-view.js":8,"jquery":2}],5:[function(require,module,exports){
+},{"../templates/compiled/templates.js":11,"./sudoku-model.js":6,"./sudoku-solver.js":7,"./sudoku-view.js":8,"jquery":2}],5:[function(require,module,exports){
 (function (global){
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.jade=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
@@ -9501,102 +9502,25 @@ exports.rethrow = function rethrow(err, filename, lineno, str){
 },{"fs":1}],6:[function(require,module,exports){
 // sudoku-model.js
 
-var $ = require('jquery');
 var utils = require('./utilities.js');
+var generator = require('./sudoku_generator.js');
 
 var sudoku_model = {};
 
-// base board to start the randomization
-sudoku_model.board = [
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [4, 5, 6, 7, 8, 9, 1, 2, 3],
-    [7, 8, 9, 1, 2, 3, 4, 5, 6],
-    [2, 3, 4, 5, 6, 7, 8, 9, 1],
-    [5, 6, 7, 8, 9, 1, 2, 3, 4],
-    [8, 9, 1, 2, 3, 4, 5, 6, 7],
-    [3, 4, 5, 6, 7, 8, 9, 1, 2],
-    [6, 7, 8, 9, 1, 2, 3, 4, 5],
-    [9, 1, 2, 3, 4, 5, 6, 7, 8]
-];
+// full board to validate user input
+sudoku_model.solution = [];
+// Unresolved board that will be modified by the user
+sudoku_model.board = [];
 
-// Generate a new board by randomizing the default board
-// Randomization will generate a random game from 3^8 (6561) possibilities
-// This requires morphing the board without breaking it
-// There are four methods that can be applied:
-// 1- Swapping two random rows in each of three groups (3^3 possibilities)
-// 2- Swapping two random columns in each of three groups (3^3 possibilities)
-// 3- Swapping all rows in two random groups (3^1 possibilities)
-// 4- Swapping all columns in two random groups (3^1 possibilities)
-sudoku_model.generateBoard = function() {
-    // Pick a random number between 0-2 for method#1 and apply to the base board
-    for (var i = 0; i < 3; i++) {
-        this.swapRowsInGroup(i, utils.getDistinctRandoms([0, 1, 2], 2));
-    }
-    // Pick a random number between 0-2 for method#2 and apply to the base board
-    for (var k = 0; k < 3; k++) {
-        this.swapColsInGroup(k, utils.getDistinctRandoms([0, 1, 2], 2));
-    }
-    // Pick a random number between 0-2 for method#3 and apply to the base board
-    this.swapRowsAmongGroups(utils.getDistinctRandoms([0, 1, 2], 2));
-    // Pick a random number between 0-2 for method#4 and apply to the base board
-    this.swapColsAmongGroups(utils.getDistinctRandoms([0, 1, 2], 2));
-    // return the new board
-    return this.board;
-};
-
-sudoku_model.swapRowsInGroup = function(groupIdx, rows) {
-    var offset = groupIdx * 3,
-        idx1 = rows[0] + offset,
-        idx2 = rows[1] + offset,
-        swap;
-
-    swap = this.board[idx1];
-    this.board[idx1] = this.board[idx2];
-    this.board[idx2] = swap;
-};
-
-sudoku_model.swapColsInGroup = function(groupIdx, cols) {
-    var offset = groupIdx * 3,
-        idx1 = cols[0] + offset,
-        idx2 = cols[1] + offset,
-        swap;
-
-    for (var i = 0, l = this.board.length; i < l; i++) {
-        swap = this.board[i][idx1];
-        this.board[i][idx1] = this.board[i][idx2];
-        this.board[i][idx2] = swap;
-    }
-};
-
-sudoku_model.swapRowsAmongGroups = function(groups) {
-    var idx1 = groups[0] * 3,
-        idx2 = groups[1] * 3,
-        swap;
-
-    for (var i = 0; i < 3; i++) {
-        swap = this.board[idx1 + i];
-        this.board[idx1 + i] = this.board[idx2 + i];
-        this.board[idx2 + i] = swap;
-    }
-};
-
-sudoku_model.swapColsAmongGroups = function(groups) {
-    var idx1 = groups[0] * 3,
-        idx2 = groups[1] * 3,
-        swap;
-
-    for (var i = 0, l = this.board.length; i < l; i++) {
-        for (var k = 0; k < 3; k++) {
-            swap = this.board[i][idx1 + k];
-            this.board[i][idx1 + k] = this.board[i][idx2 + k];
-            this.board[i][idx2 + k] = swap;
-        }
-    }
+sudoku_model.init = function() {
+    var newBoard = generator.newBoard();
+    this.board = newBoard.unresolved;
+    this.solution = newBoard.solution;
 };
 
 module.exports = sudoku_model;
 
-},{"./utilities.js":9,"jquery":2}],7:[function(require,module,exports){
+},{"./sudoku_generator.js":9,"./utilities.js":10}],7:[function(require,module,exports){
 // sudoku-solver.js
 
 var $ = require('jquery');
@@ -9609,23 +9533,204 @@ var utils = require('./utilities.js');
 
 var sudoku_view = {};
 
-sudoku_view.init = function() {
+sudoku_view.model = null;
+
+sudoku_view.init = function(model) {
+    this.model = model;
+    if (this.model.board.length === 0) {
+        this.model.init();
+    }
 };
 
-sudoku_view.render = function(board) {
+sudoku_view.render = function() {
+    var board = this.model.board,
+        cell,
+        $cell;
     for (var i = 0, l = board.length; i < l; i++) {
         for (var k = 0, m = board[i].length; k < m; k++) {
-            var cell = board[i][k];
-            var selector = utils.buildSelector(i, k);
-            $(selector).html(cell);
+            cell = board[i][k];
+            $cell = $(utils.buildSelector(i, k));
+            if (cell !== 0) {
+                $cell.html(cell);
+            } else {
+                $cell.keyup({'coors': {'x': i, 'y': k}, 'view': this}, this.validateEntry);
+            }
         }
     }
+    $('.main').keydown(utils.oneDigitNumericOnly);
+};
+
+sudoku_view.validateEntry = function(e) {
+    var value = parseInt(e.target.value),
+        board = e.data.view.model.board;
+    // validate the input
+    if (!utils.validateInput(value, e.data.coors, board)) {
+        e.target.style.border = '1px solid red';
+    } else {
+        e.target.style.border = '';
+    }
+    board[e.data.coors.x][e.data.coors.y] = value;
 };
 
 module.exports = sudoku_view;
 
-},{"./utilities.js":9,"jquery":2}],9:[function(require,module,exports){
+},{"./utilities.js":10,"jquery":2}],9:[function(require,module,exports){
+// sudoku_generator.js
+
+var utils = require('./utilities.js');
+
+var sudoku_generator = {};
+
+// base board to start the randomization
+sudoku_generator.baseBoard = [
+    [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    [4, 5, 6, 7, 8, 9, 1, 2, 3],
+    [7, 8, 9, 1, 2, 3, 4, 5, 6],
+    [2, 3, 4, 5, 6, 7, 8, 9, 1],
+    [5, 6, 7, 8, 9, 1, 2, 3, 4],
+    [8, 9, 1, 2, 3, 4, 5, 6, 7],
+    [3, 4, 5, 6, 7, 8, 9, 1, 2],
+    [6, 7, 8, 9, 1, 2, 3, 4, 5],
+    [9, 1, 2, 3, 4, 5, 6, 7, 8]
+];
+
+// Generate a new board by randomizing the base board
+// Randomization will generate a random game from 3^8 (6561) possibilities
+// This requires morphing the board without breaking it
+// There are four methods that can be applied:
+// 1- Swapping two random rows in each of three groups (3^3 possibilities)
+// 2- Swapping two random columns in each of three groups (3^3 possibilities)
+// 3- Swapping all rows in two random groups (3^1 possibilities)
+// 4- Swapping all columns in two random groups (3^1 possibilities)
+sudoku_generator.newBoard = function() {
+    var newBoard = [],
+        solution = [];
+
+    // Clone the base board to a new board to start with
+    for (var i = 0; i < this.baseBoard.length; i++) {
+        newBoard[i] = this.baseBoard[i].slice();
+    }
+
+    // Randomizations of the base board definition:
+    // 1- Pick a random number between 0-2 and apply to the base board
+    for (i = 0; i < 3; i++) {
+        swapRowsInGroup(newBoard, i, utils.getDistinctRandoms([0, 1, 2], 2));
+    }
+    // 2- Pick a random number between 0-2 and apply to the base board
+    for (i = 0; i < 3; i++) {
+        swapColsInGroup(newBoard, i, utils.getDistinctRandoms([0, 1, 2], 2));
+    }
+    // 3- Pick a random number between 0-2 and apply to the base board
+    swapRowsAmongGroups(newBoard, utils.getDistinctRandoms([0, 1, 2], 2));
+    // 4- Pick a random number between 0-2 and apply to the base board
+    swapColsAmongGroups(newBoard, utils.getDistinctRandoms([0, 1, 2], 2));
+
+    // Clone and keep the solution before hiding the cells for the game board
+    for (i = 0; i < newBoard.length; i++) {
+        solution[i] = newBoard[i].slice();
+    }
+
+    // Remove a certain number of cells depending on the difficulty
+    // Easy:    50 remaining cells
+    // Medium:  40 remaining cells
+    // Hard:    30 remaining cells
+    // return the new board
+    setDifficulty(newBoard, 'easy');
+
+    // return the board with the solution
+    return {
+        'unresolved': newBoard,
+        'solution': solution
+    };
+};
+
+var swapRowsInGroup = function(board, groupIdx, rows) {
+    var offset = groupIdx * 3,
+        idx1 = rows[0] + offset,
+        idx2 = rows[1] + offset,
+        swap;
+
+    swap = board[idx1];
+    board[idx1] = board[idx2];
+    board[idx2] = swap;
+};
+
+var swapColsInGroup = function(board, groupIdx, cols) {
+    var offset = groupIdx * 3,
+        idx1 = cols[0] + offset,
+        idx2 = cols[1] + offset,
+        swap;
+
+    for (var i = 0, l = board.length; i < l; i++) {
+        swap = board[i][idx1];
+        board[i][idx1] = board[i][idx2];
+        board[i][idx2] = swap;
+    }
+};
+
+var swapRowsAmongGroups = function(board, groups) {
+    var idx1 = groups[0] * 3,
+        idx2 = groups[1] * 3,
+        swap;
+
+    for (var i = 0; i < 3; i++) {
+        swap = board[idx1 + i];
+        board[idx1 + i] = board[idx2 + i];
+        board[idx2 + i] = swap;
+    }
+};
+
+var swapColsAmongGroups = function(board, groups) {
+    var idx1 = groups[0] * 3,
+        idx2 = groups[1] * 3,
+        swap;
+
+    for (var i = 0, l = board.length; i < l; i++) {
+        for (var k = 0; k < 3; k++) {
+            swap = board[i][idx1 + k];
+            board[i][idx1 + k] = board[i][idx2 + k];
+            board[i][idx2 + k] = swap;
+        }
+    }
+};
+
+var setDifficulty = function(board, difficulty) {
+    // pick a certain number of random cells to hide from each row
+    var count;
+    switch (difficulty) {
+        case 'easy':
+            count = 3;
+            break;
+        case 'medium':
+            count = 4;
+            break;
+        case 'hard':
+            count = 5;
+            break;
+        default:
+            count = 3;
+    }
+
+    for (var i = 0, l = board.length; i < l; i++) {
+        var row = board[i];
+        var toBeHidden = utils.getDistinctRandoms(row, count);
+        for (var k = 0, m = toBeHidden.length; k < m; k++) {
+            var num = toBeHidden[k];
+            for (var p = 0, r = row.length; p < r; p++) {
+                if (row[p] === num) {
+                    board[i][p] = 0;
+                    break;
+                }
+            }
+        }
+    }
+};
+
+module.exports = sudoku_generator;
+
+},{"./utilities.js":10}],10:[function(require,module,exports){
 // utilities.js
+var $ = require('jquery');
 
 var utils = {};
 
@@ -9635,20 +9740,77 @@ utils.buildSelector = function(x, y) {
 };
 
 utils.getDistinctRandoms = function(array, count) {
+    var items = array.slice();
     var ret = [];
-    if (array.length <= count) {
-        ret = array;
+    if (items.length <= count) {
+        ret = items;
     } else {
         for (var i = 0; i < count; i++) {
-            ret.push(array.splice(Math.floor(Math.random() * array.length), 1)[0]);
+            ret.push(items.splice(Math.floor(Math.random() * items.length), 1)[0]);
         }
     }
     return ret;
 };
 
+utils.validateInput = function(value, coors, board) {
+    // check row
+    for (var i = 0; i < board[coors.x].length; i++) {
+        if (i === coors.y) {
+            continue;
+        }
+        if (board[coors.x][i] === value) {
+            return false;
+        }
+    }
+
+    // check column
+    for (i = 0; i < board.length; i++) {
+        if (i === coors.x) {
+            continue;
+        }
+        if (board[i][coors.y] === value) {
+            return false;
+        }
+    }
+
+    // check sub-table
+    // get sub talbes
+    var topLeft_x = Math.floor(coors.x / 3) + coors.x % 3;
+    var topLeft_y = Math.floor(coors.y / 3) + coors.y % 3;
+    for (i = topLeft_x; i < topLeft_x + 3; i++) {
+        for (var k = topLeft_y; k < topLeft_y + 3; k++) {
+            if (board[i][k] === value) {
+                return false;
+            }
+        }
+    }
+
+    // no dups found
+    return true;
+};
+
+utils.oneDigitNumericOnly = function(e) {
+    e.originalEvent.returnValue = false;
+    var key = e.keyCode,
+        value = String.fromCharCode(key),
+        isNumeric = $.isNumeric(value);
+
+    if (!isNumeric) {
+        if ((key >= 8 && key <= 27) || (key >= 33 && key <= 46) || (key >= 96 && key <= 105)) {
+            e.originalEvent.returnValue = true;
+        }
+    } else {
+        if (e.target.value.length === 0) {
+            // cannot be more than one digits
+            e.originalEvent.returnValue = true;
+        }
+    }
+};
+
+
 module.exports = utils;
 
-},{}],10:[function(require,module,exports){
+},{"jquery":2}],11:[function(require,module,exports){
 this["Templates"] = this["Templates"] || {};
 
 this["Templates"]["sub-table-row"] = function template(locals) {
@@ -9664,7 +9826,7 @@ var jade_interp;
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -9672,7 +9834,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -9703,7 +9865,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -9711,7 +9873,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -9734,7 +9896,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -9742,7 +9904,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -9788,7 +9950,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -9796,7 +9958,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -9819,7 +9981,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -9827,7 +9989,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -9865,7 +10027,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -9873,7 +10035,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -9896,7 +10058,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -9904,7 +10066,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -9965,7 +10127,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -9973,7 +10135,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -9996,7 +10158,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -10004,176 +10166,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tbody></table></td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["st-" + (val) + ""], [true])) + "><table class=\"pure-table\"><tbody>");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tbody></table></td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["st-" + (val) + ""], [true])) + "><table class=\"pure-table\"><tbody>");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  }
-}).call(this);
-
-buf.push("</tr>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
-// iterate [0,1,2]
-;(function(){
-  var $$obj = [0,1,2];
-  if ('number' == typeof $$obj.length) {
-
-    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
-    }
-
-  } else {
-    var $$l = 0;
-    for (var $index in $$obj) {
-      $$l++;      var val = $$obj[$index];
-
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -10211,7 +10204,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -10219,7 +10212,7 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -10242,7 +10235,7 @@ buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   } else {
@@ -10250,7 +10243,176 @@ buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((j
     for (var $index in $$obj) {
       $$l++;      var val = $$obj[$index];
 
-buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + ">" + (jade.escape((jade_interp = val) == null ? '' : jade_interp)) + "</td>");
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tbody></table></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["st-" + (val) + ""], [true])) + "><table class=\"pure-table\"><tbody>");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tbody></table></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["st-" + (val) + ""], [true])) + "><table class=\"pure-table\"><tbody>");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</tr>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<tr" + (jade.cls(["r-" + (val) + ""], [true])) + ">");
+// iterate [0,1,2]
+;(function(){
+  var $$obj = [0,1,2];
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var val = $$obj[$index];
+
+buf.push("<td" + (jade.cls(["c-" + (val) + ""], [true])) + "><input type=\"number\"></td>");
     }
 
   }
@@ -10276,4 +10438,4 @@ buf.push("</tr>");
 
 buf.push("</tbody></table>");}.call(this,"undefined" in locals_for_with?locals_for_with.undefined:typeof undefined!=="undefined"?undefined:undefined));;return buf.join("");
 };
-},{}]},{},[10,3,4,5,6,7,8,9]);
+},{}]},{},[11,3,4,5,6,7,8,9,10]);
