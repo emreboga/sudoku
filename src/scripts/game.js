@@ -8,3 +8,4 @@ var solver = require('./sudoku-solver.js');
 var templates = require('../templates/compiled/templates.js').Templates;
 
 $('.main').html(templates.table());
+view.render(model.generateBoard());
