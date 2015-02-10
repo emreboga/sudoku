@@ -9245,20 +9245,6 @@ events.publish = function(topic, args) {
 module.exports = events;
 
 },{}],4:[function(require,module,exports){
-// game.js
-
-var $ = require('jquery');
-
-var model = require('./sudoku-model.js');
-var view = require('./sudoku-view.js');
-var solver = require('./sudoku-solver.js');
-var templates = require('../templates/compiled/templates.js').Templates;
-
-$('.main').html(templates.table());
-view.init(model);
-view.render();
-
-},{"../templates/compiled/templates.js":11,"./sudoku-model.js":6,"./sudoku-solver.js":7,"./sudoku-view.js":8,"jquery":2}],5:[function(require,module,exports){
 (function (global){
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.jade=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
@@ -9499,10 +9485,9 @@ exports.rethrow = function rethrow(err, filename, lineno, str){
 },{}]},{},[1])(1)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"fs":1}],6:[function(require,module,exports){
+},{"fs":1}],5:[function(require,module,exports){
 // sudoku-model.js
 
-var utils = require('./utilities.js');
 var generator = require('./sudoku_generator.js');
 
 var sudoku_model = {};
@@ -9511,6 +9496,8 @@ var sudoku_model = {};
 sudoku_model.solution = [];
 // Unresolved board that will be modified by the user
 sudoku_model.board = [];
+// Track whether the board has any invalid entries
+sudoku_model.errorCount = 0;
 
 sudoku_model.init = function() {
     var newBoard = generator.newBoard();
@@ -9520,12 +9507,7 @@ sudoku_model.init = function() {
 
 module.exports = sudoku_model;
 
-},{"./sudoku_generator.js":9,"./utilities.js":10}],7:[function(require,module,exports){
-// sudoku-solver.js
-
-var $ = require('jquery');
-
-},{"jquery":2}],8:[function(require,module,exports){
+},{"./sudoku_generator.js":8}],6:[function(require,module,exports){
 // sudoku-view.js
 
 var $ = require('jquery');
@@ -9544,14 +9526,14 @@ sudoku_view.init = function(model) {
 
 sudoku_view.render = function() {
     var board = this.model.board,
-        cell,
+        cellValue,
         $cell;
     for (var i = 0, l = board.length; i < l; i++) {
         for (var k = 0, m = board[i].length; k < m; k++) {
-            cell = board[i][k];
+            cellValue = board[i][k];
             $cell = $(utils.buildSelector(i, k));
-            if (cell !== 0) {
-                $cell.html(cell);
+            if (cellValue !== 0) {
+                $cell.html(cellValue);
             } else {
                 $cell.keyup({'coors': {'x': i, 'y': k}, 'view': this}, this.validateEntry);
             }
@@ -9562,19 +9544,42 @@ sudoku_view.render = function() {
 
 sudoku_view.validateEntry = function(e) {
     var value = parseInt(e.target.value),
-        board = e.data.view.model.board;
+        model = e.data.view.model;
     // validate the input
-    if (!utils.validateInput(value, e.data.coors, board)) {
-        e.target.style.border = '1px solid red';
+    if (!utils.validateInput(value, e.data.coors, model.board)) {
+        if (e.target.style.border !== '1px solid red') {
+            e.target.style.border = '1px solid red';
+            model.errorCount += 1;
+        }
     } else {
-        e.target.style.border = '';
+        if (e.target.style.border !== '') {
+            e.target.style.border = '';
+            model.errorCount -= 1;
+        }
     }
-    board[e.data.coors.x][e.data.coors.y] = value;
+    alert(model.errorCount);
+    model.board[e.data.coors.x][e.data.coors.y] = value;
 };
 
 module.exports = sudoku_view;
 
-},{"./utilities.js":10,"jquery":2}],9:[function(require,module,exports){
+},{"./utilities.js":9,"jquery":2}],7:[function(require,module,exports){
+// sudoku_game.js
+
+var $ = require('jquery');
+var model = require('./sudoku-model.js');
+var view = require('./sudoku-view.js');
+var templates = require('../templates/compiled/templates.js').Templates;
+
+// generate the html table for the board
+$('.main').html(templates.table());
+
+// initialize the view with a model
+view.init(model);
+// render the view to start the game
+view.render();
+
+},{"../templates/compiled/templates.js":10,"./sudoku-model.js":5,"./sudoku-view.js":6,"jquery":2}],8:[function(require,module,exports){
 // sudoku_generator.js
 
 var utils = require('./utilities.js');
@@ -9728,7 +9733,7 @@ var setDifficulty = function(board, difficulty) {
 
 module.exports = sudoku_generator;
 
-},{"./utilities.js":10}],10:[function(require,module,exports){
+},{"./utilities.js":9}],9:[function(require,module,exports){
 // utilities.js
 var $ = require('jquery');
 
@@ -9775,8 +9780,8 @@ utils.validateInput = function(value, coors, board) {
 
     // check sub-table
     // get sub talbes
-    var topLeft_x = Math.floor(coors.x / 3) + coors.x % 3;
-    var topLeft_y = Math.floor(coors.y / 3) + coors.y % 3;
+    var topLeft_x = Math.floor(coors.x / 3) * 3 + coors.x % 3;
+    var topLeft_y = Math.floor(coors.y / 3) * 3 + coors.y % 3;
     for (i = topLeft_x; i < topLeft_x + 3; i++) {
         for (var k = topLeft_y; k < topLeft_y + 3; k++) {
             if (board[i][k] === value) {
@@ -9810,7 +9815,7 @@ utils.oneDigitNumericOnly = function(e) {
 
 module.exports = utils;
 
-},{"jquery":2}],11:[function(require,module,exports){
+},{"jquery":2}],10:[function(require,module,exports){
 this["Templates"] = this["Templates"] || {};
 
 this["Templates"]["sub-table-row"] = function template(locals) {
@@ -10438,4 +10443,4 @@ buf.push("</tr>");
 
 buf.push("</tbody></table>");}.call(this,"undefined" in locals_for_with?locals_for_with.undefined:typeof undefined!=="undefined"?undefined:undefined));;return buf.join("");
 };
-},{}]},{},[11,3,4,5,6,7,8,9,10]);
+},{}]},{},[10,3,4,5,6,7,8,9]);
