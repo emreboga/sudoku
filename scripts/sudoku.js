@@ -9208,6 +9208,43 @@ return jQuery;
 }));
 
 },{}],3:[function(require,module,exports){
+// events.js
+
+var events = {};
+events.topics = {};
+
+events.subscribe = function(topic, listener) {
+    // Create the topic's object if not yet created
+    if (!this.topics.hasOwnProperty(topic)) {
+        this.topics[topic] = [];
+    }
+
+    // Add the listener to queue
+    var index = this.topics[topic].push(listener) - 1;
+
+    // Provide handle back for removal of topic
+    return {
+        remove: function() {
+            delete this.topics[topic][index];
+        }
+    };
+};
+
+events.publish = function(topic, args) {
+    // If the topic doesn't exist, or there's no listeners in queue, just leave
+    if (!this.topics.hasOwnProperty(topic)) {
+        return;
+    }
+
+    // Cycle through topics queue, fire!
+    this.topics[topic].forEach(function(item) {
+        item.apply(args || {});
+    });
+};
+
+module.exports = events;
+
+},{}],4:[function(require,module,exports){
 // game.js
 
 var $ = require('jquery');
@@ -9218,8 +9255,9 @@ var solver = require('./sudoku-solver.js');
 var templates = require('../templates/compiled/templates.js').Templates;
 
 $('.main').html(templates.table());
+view.render(model.generateBoard());
 
-},{"../templates/compiled/templates.js":8,"./sudoku-model.js":5,"./sudoku-solver.js":6,"./sudoku-view.js":7,"jquery":2}],4:[function(require,module,exports){
+},{"../templates/compiled/templates.js":10,"./sudoku-model.js":6,"./sudoku-solver.js":7,"./sudoku-view.js":8,"jquery":2}],5:[function(require,module,exports){
 (function (global){
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.jade=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
@@ -9460,22 +9498,157 @@ exports.rethrow = function rethrow(err, filename, lineno, str){
 },{}]},{},[1])(1)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"fs":1}],5:[function(require,module,exports){
+},{"fs":1}],6:[function(require,module,exports){
 // sudoku-model.js
 
 var $ = require('jquery');
+var utils = require('./utilities.js');
 
-},{"jquery":2}],6:[function(require,module,exports){
+var sudoku_model = {};
+
+// base board to start the randomization
+sudoku_model.board = [
+    [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    [4, 5, 6, 7, 8, 9, 1, 2, 3],
+    [7, 8, 9, 1, 2, 3, 4, 5, 6],
+    [2, 3, 4, 5, 6, 7, 8, 9, 1],
+    [5, 6, 7, 8, 9, 1, 2, 3, 4],
+    [8, 9, 1, 2, 3, 4, 5, 6, 7],
+    [3, 4, 5, 6, 7, 8, 9, 1, 2],
+    [6, 7, 8, 9, 1, 2, 3, 4, 5],
+    [9, 1, 2, 3, 4, 5, 6, 7, 8]
+];
+
+// Generate a new board by randomizing the default board
+// Randomization will generate a random game from 3^8 (6561) possibilities
+// This requires morphing the board without breaking it
+// There are four methods that can be applied:
+// 1- Swapping two random rows in each of three groups (3^3 possibilities)
+// 2- Swapping two random columns in each of three groups (3^3 possibilities)
+// 3- Swapping all rows in two random groups (3^1 possibilities)
+// 4- Swapping all columns in two random groups (3^1 possibilities)
+sudoku_model.generateBoard = function() {
+    // Pick a random number between 0-2 for method#1 and apply to the base board
+    for (var i = 0; i < 3; i++) {
+        this.swapRowsInGroup(i, utils.getDistinctRandoms([0, 1, 2], 2));
+    }
+    // Pick a random number between 0-2 for method#2 and apply to the base board
+    for (var k = 0; k < 3; k++) {
+        this.swapColsInGroup(k, utils.getDistinctRandoms([0, 1, 2], 2));
+    }
+    // Pick a random number between 0-2 for method#3 and apply to the base board
+    this.swapRowsAmongGroups(utils.getDistinctRandoms([0, 1, 2], 2));
+    // Pick a random number between 0-2 for method#4 and apply to the base board
+    this.swapColsAmongGroups(utils.getDistinctRandoms([0, 1, 2], 2));
+    // return the new board
+    return this.board;
+};
+
+sudoku_model.swapRowsInGroup = function(groupIdx, rows) {
+    var offset = groupIdx * 3,
+        idx1 = rows[0] + offset,
+        idx2 = rows[1] + offset,
+        swap;
+
+    swap = this.board[idx1];
+    this.board[idx1] = this.board[idx2];
+    this.board[idx2] = swap;
+};
+
+sudoku_model.swapColsInGroup = function(groupIdx, cols) {
+    var offset = groupIdx * 3,
+        idx1 = cols[0] + offset,
+        idx2 = cols[1] + offset,
+        swap;
+
+    for (var i = 0, l = this.board.length; i < l; i++) {
+        swap = this.board[i][idx1];
+        this.board[i][idx1] = this.board[i][idx2];
+        this.board[i][idx2] = swap;
+    }
+};
+
+sudoku_model.swapRowsAmongGroups = function(groups) {
+    var idx1 = groups[0] * 3,
+        idx2 = groups[1] * 3,
+        swap;
+
+    for (var i = 0; i < 3; i++) {
+        swap = this.board[idx1 + i];
+        this.board[idx1 + i] = this.board[idx2 + i];
+        this.board[idx2 + i] = swap;
+    }
+};
+
+sudoku_model.swapColsAmongGroups = function(groups) {
+    var idx1 = groups[0] * 3,
+        idx2 = groups[1] * 3,
+        swap;
+
+    for (var i = 0, l = this.board.length; i < l; i++) {
+        for (var k = 0; k < 3; k++) {
+            swap = this.board[i][idx1 + k];
+            this.board[i][idx1 + k] = this.board[i][idx2 + k];
+            this.board[i][idx2 + k] = swap;
+        }
+    }
+};
+
+module.exports = sudoku_model;
+
+},{"./utilities.js":9,"jquery":2}],7:[function(require,module,exports){
 // sudoku-solver.js
 
 var $ = require('jquery');
 
-},{"jquery":2}],7:[function(require,module,exports){
+},{"jquery":2}],8:[function(require,module,exports){
 // sudoku-view.js
 
 var $ = require('jquery');
+var utils = require('./utilities.js');
 
-},{"jquery":2}],8:[function(require,module,exports){
+var sudoku_view = {};
+
+sudoku_view.init = function() {
+};
+
+sudoku_view.render = function(board) {
+    for (var i = 0, l = board.length; i < l; i++) {
+        for (var k = 0, m = board[i].length; k < m; k++) {
+            var cell = board[i][k];
+            var selector = utils.buildSelector(i, k);
+            $(selector).html(cell);
+        }
+    }
+};
+
+module.exports = sudoku_view;
+
+},{"./utilities.js":9,"jquery":2}],9:[function(require,module,exports){
+// utilities.js
+
+var utils = {};
+
+utils.buildSelector = function(x, y) {
+    var selector = '.r-' + Math.floor(x / 3) + ' .st-' + Math.floor(y / 3) + ' .r-' + (x % 3) + ' .c-' + (y % 3);
+    return selector;
+};
+
+utils.getDistinctRandoms = function(array, count) {
+    var ret = [];
+    if (array.length <= count) {
+        ret = array;
+    } else {
+        for (var i = 0; i < count; i++) {
+            ret.push(array.splice(Math.floor(Math.random() * array.length), 1)[0]);
+        }
+    }
+    return ret;
+};
+
+module.exports = utils;
+
+},{}],10:[function(require,module,exports){
 this["Templates"] = this["Templates"] || {};
 
 this["Templates"]["sub-table-row"] = function template(locals) {
@@ -10103,4 +10276,4 @@ buf.push("</tr>");
 
 buf.push("</tbody></table>");}.call(this,"undefined" in locals_for_with?locals_for_with.undefined:typeof undefined!=="undefined"?undefined:undefined));;return buf.join("");
 };
-},{}]},{},[8,3,4,5,6,7]);
+},{}]},{},[10,3,4,5,6,7,8,9]);
