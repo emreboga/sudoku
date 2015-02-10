@@ -8,6 +8,8 @@ var sudoku_model = {};
 sudoku_model.solution = [];
 // Unresolved board that will be modified by the user
 sudoku_model.board = [];
+// Track whether the board has any invalid entries
+sudoku_model.errorCount = 0;
 
 sudoku_model.init = function() {
     var newBoard = generator.newBoard();

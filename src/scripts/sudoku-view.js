@@ -34,14 +34,20 @@ sudoku_view.render = function() {
 
 sudoku_view.validateEntry = function(e) {
     var value = parseInt(e.target.value),
-        board = e.data.view.model.board;
+        model = e.data.view.model;
     // validate the input
-    if (!utils.validateInput(value, e.data.coors, board)) {
-        e.target.style.border = '1px solid red';
+    if (!utils.validateInput(value, e.data.coors, model.board)) {
+        if (e.target.style.border !== '1px solid red') {
+            e.target.style.border = '1px solid red';
+            model.errorCount += 1;
+        }
     } else {
-        e.target.style.border = '';
+        if (e.target.style.border !== '') {
+            e.target.style.border = '';
+            model.errorCount -= 1;
+        }
     }
-    board[e.data.coors.x][e.data.coors.y] = value;
+    model.board[e.data.coors.x][e.data.coors.y] = value;
 };
 
 module.exports = sudoku_view;

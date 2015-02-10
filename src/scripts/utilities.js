@@ -44,8 +44,8 @@ utils.validateInput = function(value, coors, board) {
 
     // check sub-table
     // get sub talbes
-    var topLeft_x = Math.floor(coors.x / 3) + coors.x % 3;
-    var topLeft_y = Math.floor(coors.y / 3) + coors.y % 3;
+    var topLeft_x = Math.floor(coors.x / 3) * 3 + coors.x % 3;
+    var topLeft_y = Math.floor(coors.y / 3) * 3 + coors.y % 3;
     for (i = topLeft_x; i < topLeft_x + 3; i++) {
         for (var k = topLeft_y; k < topLeft_y + 3; k++) {
             if (board[i][k] === value) {
