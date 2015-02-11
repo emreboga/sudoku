@@ -24,9 +24,13 @@ sudoku_model.errorCount = 0;
 sudoku_model.init = function(difficulty) {
     // get a new board from the generator
     var newBoard = generator.newBoard(difficulty);
+
     // set the unresolved and solution boards
     this.board = newBoard.unresolved;
     this.solution = newBoard.solution;
+
+    // reset the error count for future re-starts
+    this.errorCount = 0;
 };
 
 module.exports = sudoku_model;

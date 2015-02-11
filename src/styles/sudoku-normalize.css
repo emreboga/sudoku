@@ -23,6 +23,11 @@ input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+@media only screen and (max-width : 599px) {
+    body {
+        font-size: 12px;
+    }
+}
 
 /* 
  * pure-css normalizations
@@ -35,10 +40,24 @@ input[type=number]::-webkit-inner-spin-button {
     border-bottom-width: 1px;
 }
 
-
-/* Smartphones */
-@media only screen and (max-width : 599px) {
-    body {
-        font-size: 12px;
-    }
+/*
+ * jquery-ui normalizations
+ */
+.dialog-custom {
+    background-color: #1a1a1a;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+.dialog-custom .ui-dialog-titlebar-close {
+    display: none;
+}
+.dialog-custom .ui-dialog-content {
+    padding: 0;
+}
+.dialog-custom .ui-dialog-buttonpane {
+    margin: 0;
+    border: none;
+}
+.dialog-custom .ui-dialog-buttonpane button {
+    width: 100%
 }

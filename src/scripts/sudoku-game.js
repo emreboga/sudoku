@@ -3,13 +3,10 @@
 var $ = require('jquery');
 var model = require('./sudoku-model.js');
 var view = require('./sudoku-view.js');
-var templates = require('../templates/compiled/templates.js').Templates;
 
 var sudoku_game = {};
 
 sudoku_game.start = function() {
-    // generate the html table for the board
-    $('.game').html(templates.table());
     // initialize the view with a model
     view.init(model);
     // render the view to start the game

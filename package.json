@@ -11,7 +11,8 @@
     "grunt-contrib-jade": "^0.14.1",
     "grunt-contrib-watch": "^0.6.1",
     "jade": "^1.9.2",
-    "jquery": "^2.1.3"
+    "jquery": "^2.1.3",
+    "jquery-ui": "^1.10.5"
   },
   "scripts": {
     "deploy": "git subtree push --prefix build origin gh-pages"

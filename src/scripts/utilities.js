@@ -76,4 +76,21 @@ utils.oneDigitNumericOnly = function(e) {
     }
 };
 
+utils.validateCompletion = function(model) {
+    var completed = false,
+        sum = 0;
+    if (model.errorCount === 0) {
+        // add up all values
+        for (var i = 0; i < 9; i++) {
+            for (var k = 0; k < 9; k++) {
+                sum += model.board[i][k];
+            }
+        }
+        if (sum === 405) {
+            completed = true;
+        }
+    }
+    return completed;
+};
+
 module.exports = utils;
