@@ -27,7 +27,7 @@ The design and development process of Sudoku game is based on two principles:
 A simplistic UI design approach: This approach is influenced by the black/white theming of Uber.com. The board background is black. Texts and boarders and white. This design gives an easy yet elegant feeling to the game.  
 A complete build system with easy deployment: Grunt.js is used for the build system. This gives us a configurable build system around customizable tasks. You can find more information on these tasks below under 'Build' section.
 
-### Build and Structure
+### Build Platform
 Grunt.js gives us the flexibility around tasks. Each task is run during the build process to deploy to the build folder. These tasks are specific to the platform technologies chosen. You can find detailed informtaion for these technologies, reasonings behind them and trade-offs under the each topic below.
 #### Browserify
 Resolves the dependencies between modules and produces a bundle accordingly. The bundle is deployed under build/scripts for distribution.  
@@ -36,6 +36,19 @@ Bundles the specified CSS files into one file and deploys under build/styles fol
 #### Copy
 Copies the static files to the build folder. This is only for the skeleton html file (index.html) and the Jade runtime (jade-runtime.js).
 #### Jade
-Compiles the jade tempplates to JavaScript and copies to the templates/compiled directory in the source tree. These compiled files are then bundled with the rest of the JavaScript files by browserify.
+Compiles the jade templates to JavaScript and copies to the templates/compiled directory in the source tree. These compiled files are then bundled with the rest of the JavaScript files by browserify.
 #### Watch
 Watches for any changes in the source tree to re-run the build. This tasks is for convenience and faster development.  
+
+### Architecture
+An Model-View approach is adopted when building the game.
+#### Model
+Sudoku-model.js file defines the model of this architecture, which initiates and stores sudoku board data.
+#### View
+Sudoku-view.js file defines the view of this architecture, which handles all user interaction and input validations.
+#### External Libraries
+For certain functionality, third-party libraries has been used in the architecture. These are:  
+1- jQuery  
+2- jQuery UI  
+3- Jade Client Runtime  
+4- Base and Table componetns from Pure-css library  
