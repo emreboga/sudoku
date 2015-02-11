@@ -17,7 +17,7 @@
     cursor: pointer;
 }
 
-/* Smartphones */
+/* Smartphones-portrait */
 @media only screen and (max-width : 599px) and (orientation: portrait) {
     .options {
         width: 300px;
@@ -25,6 +25,7 @@
         padding: 5px 0;
     }
 }
+/* Smartphones-landscape */
 @media only screen and (max-width : 599px) and (orientation: landscape) {
     .options {
         width: 320px;

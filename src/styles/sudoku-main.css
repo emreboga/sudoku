@@ -1,0 +1,14 @@
+.main {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+.main-middle {
+    display: table-cell;
+    vertical-align: middle;
+}
+.main-center {
+    margin-left: auto;
+    margin-right: auto;
+}
