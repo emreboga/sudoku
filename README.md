@@ -40,8 +40,14 @@ Copies the static files to the build folder. This is only for the skeleton html 
 Compiles the jade templates to JavaScript and copies to the templates/compiled directory in the source tree. These compiled files are then bundled with the rest of the JavaScript files by browserify.
 #### Watch
 Watches for any changes in the source tree to re-run the build. This tasks is for convenience and faster development.  
-#### Deployment
-To deploy the built resources, an NPM script is added to run a 'git subtree' commmand. This command rebases the gh-pages branch (where the live site is served from) from the specified deployment folder.
+#### How to build
+In order to build the source code under src folder, you need to:  
+1- Clone the repo to your local machine.  
+2- Go to root folder (where gruntfile.js and package.json are located)  
+3- Run 'npm install' to install required libraries. You may need to run the command with 'sudo' if you see any access or write errors.  
+4- Run 'grunt' to build and start to 'watch'. This will listen to any changes made in the src folder and trigger a re-build.
+#### How to deploy
+To deploy the built resources, an NPM script is added to run a 'git subtree' commmand. This command rebases the gh-pages branch (where the live site is served from) from the specified deployment folder. To run this command you can type 'npm run deploy' while in the root folder in master branch.
 ### Architecture
 An Model-View approach is adopted when building the game.
 #### Model
