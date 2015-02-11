@@ -1,5 +1,5 @@
 # Sudoku
-This repo represents a full front-end implementation of Sudoku game. For details on Sudoku please refer to http://en.wikipedia.org/wiki/Sudoku
+This repo represents a full front-end implementation of Sudoku game. For more information about Sudoku please refer to http://en.wikipedia.org/wiki/Sudoku
 
 ## How to run
 The product code has been deployed to github pages branch. Please open the below link to play the game:  
@@ -17,3 +17,19 @@ You can select a difficulty from easy, medium and hard. The difficulty of the ga
 ### When user enters a number
 Users can enter numbers only in empty cells. When a user enters a number, the game checks the validation of the number, which means no duplicates in the same row, column and sub-group. If the number is NOT valid, the cell will be highlighted to indicate the invalid number. If user re-enters valid number, or deletes the invalid number, the game will clear highlight.  
 
+### When user completes the board
+When a user enters all valid numbers and completes the board, the game will congratulate the user and give two options in a dialog:  
+1- Start a new game with the same difficulty.  
+2- Close the dialog and do not start a new game.  
+
+## Design and Development
+The design and development process of Sudoku game is based on two principles:  
+A simplistic UI design approach: This approach is influenced by the black/white theming of Uber.com. The board background is black. Texts and boarders and white. This design gives an easy yet elegant feeling to the game.  
+A complete build system with easy deployment: Grunt.js is used for the build system. This gives us a configurable build system around customizable tasks. You can find more information on these tasks below under 'Build' section.
+
+### Build and Structure
+Grunt.js gives us the flexibility around tasks. Each task is run during the build process to deploy to the build folder. These tasks are specific to the platform technologies chosen. You can find detailed informtaion for these technologies, reasonings behind them and trade-offs under the each topic below.
+#### Browserify
+Resolves the dependencies between modules and produces a bundle accordingly. The bundle is deployed under build/scripts for distribution.  
+
+#### Concat
