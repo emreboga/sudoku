@@ -645,7 +645,20 @@ striping:
 }
 
 .main {
-    margin-top: 5% 0;
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.main-middle {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.main-center {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .game {
@@ -667,6 +680,22 @@ striping:
     table-layout: fixed;
 }
 
+/* Smartphones */
+@media only screen and (max-width : 599px) and (orientation: portrait) {
+    .game {
+        height: 300px;
+        width: 300px;
+        margin: 0 auto;
+    }
+}
+@media only screen and (max-width : 599px) and (orientation: landscape) {
+    .game {
+        height: 280px;
+        width: 320px;
+        margin: 0 auto;
+    }
+}
+
 /*
  * user-agent normalizations
  */
@@ -674,7 +703,7 @@ body {
     background-color: #1a1a1a;
     border-color: #FFFFFF;
     color: #FFFFFF;
-    font-size: 18px;
+    font-size: 20px;
 }
 input[type=number] {
     width: 100%;
@@ -704,14 +733,22 @@ input[type=number]::-webkit-inner-spin-button {
     border-bottom-width: 1px;
 }
 
+
+/* Smartphones */
+@media only screen and (max-width : 599px) {
+    body {
+        font-size: 12px;
+    }
+}
+
 .options {
     width: 600px;
     margin: 0px auto;
-    padding: 10px 0;
+    padding: 1% 0;
 }
 .options .difficulty {
     text-align: center;
-    padding: 3% 0;
+    padding: 1% 0;
 }
 .options .difficulty .selected {
     border: 1px solid #FFFFFF;
@@ -719,6 +756,15 @@ input[type=number]::-webkit-inner-spin-button {
 .options .difficulty .option {
     display: inline-block;
     width: 32%;
-    padding: 3% 0;
+    padding: 1% 0;
     cursor: pointer;
+}
+
+/* Smartphones */
+@media only screen and (max-width : 599px) {
+    .options {
+        width: 320px;
+        margin: 0px auto;
+        padding: 5px 0;
+    }
 }
