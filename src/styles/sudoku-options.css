@@ -4,15 +4,27 @@
     padding: 1% 0;
 }
 .options .difficulty {
+    width: 60%;
     text-align: center;
     padding: 1% 0;
+    float: left;
+}
+.options .solution {
+    width: 33%;
+    text-align: center;
+    padding: 1% 0;
+    float: right;
+}
+.options .solution button {
+    width: 100%;
+    line-height: 120%;
 }
 .options .difficulty .selected {
     border: 1px solid #FFFFFF;
 }
 .options .difficulty .option {
     display: inline-block;
-    width: 32%;
+    width: 30%;
     padding: 1% 0;
     cursor: pointer;
 }

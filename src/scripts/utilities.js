@@ -112,4 +112,11 @@ utils.validateCompletion = function(model) {
     return completed;
 };
 
+// Solves a game with the game's model.solution
+utils.solve = function(e) {
+    var view = e.data.view;
+    view.model.board = view.model.solution;
+    view.render();
+};
+
 module.exports = utils;

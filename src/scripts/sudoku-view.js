@@ -26,6 +26,8 @@ sudoku_view.reset = function() {
     this.model.init(this.getDifficulty());
     // generate the html table for the board
     $('.game').html(templates.table());
+    // Handler for solution
+    $('.options .solution button').click({'view': this}, utils.solve);
 };
 
 // Renders the view on the page

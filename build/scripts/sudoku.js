@@ -14436,6 +14436,8 @@ sudoku_view.reset = function() {
     this.model.init(this.getDifficulty());
     // generate the html table for the board
     $('.game').html(templates.table());
+    // Handler for solution
+    $('.options .solution button').click({'view': this}, utils.solve);
 };
 
 // Renders the view on the page
@@ -14660,6 +14662,13 @@ utils.validateCompletion = function(model) {
         }
     }
     return completed;
+};
+
+// Solves a game with the game's model.solution
+utils.solve = function(e) {
+    var view = e.data.view;
+    view.model.board = view.model.solution;
+    view.render();
 };
 
 module.exports = utils;
