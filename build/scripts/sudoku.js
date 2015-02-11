@@ -9208,43 +9208,6 @@ return jQuery;
 }));
 
 },{}],3:[function(require,module,exports){
-// events.js
-
-var events = {};
-events.topics = {};
-
-events.subscribe = function(topic, listener) {
-    // Create the topic's object if not yet created
-    if (!this.topics.hasOwnProperty(topic)) {
-        this.topics[topic] = [];
-    }
-
-    // Add the listener to queue
-    var index = this.topics[topic].push(listener) - 1;
-
-    // Provide handle back for removal of topic
-    return {
-        remove: function() {
-            delete this.topics[topic][index];
-        }
-    };
-};
-
-events.publish = function(topic, args) {
-    // If the topic doesn't exist, or there's no listeners in queue, just leave
-    if (!this.topics.hasOwnProperty(topic)) {
-        return;
-    }
-
-    // Cycle through topics queue, fire!
-    this.topics[topic].forEach(function(item) {
-        item.apply(args || {});
-    });
-};
-
-module.exports = events;
-
-},{}],4:[function(require,module,exports){
 (function (global){
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.jade=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
@@ -9485,7 +9448,7 @@ exports.rethrow = function rethrow(err, filename, lineno, str){
 },{}]},{},[1])(1)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"fs":1}],5:[function(require,module,exports){
+},{"fs":1}],4:[function(require,module,exports){
 // sudoku_game
 
 var $ = require('jquery');
@@ -9527,7 +9490,7 @@ $('.difficulty .option').click(function(e) {
 // Start the game
 sudoku_game.start();
 
-},{"../templates/compiled/templates.js":10,"./sudoku-model.js":7,"./sudoku-view.js":8,"jquery":2}],6:[function(require,module,exports){
+},{"../templates/compiled/templates.js":9,"./sudoku-model.js":6,"./sudoku-view.js":7,"jquery":2}],5:[function(require,module,exports){
 // sudoku_generator
 
 var utils = require('./utilities.js');
@@ -9681,7 +9644,7 @@ var setDifficulty = function(board, difficulty) {
 
 module.exports = sudoku_generator;
 
-},{"./utilities.js":9}],7:[function(require,module,exports){
+},{"./utilities.js":8}],6:[function(require,module,exports){
 // sudoku_model
 
 var generator = require('./sudoku-generator.js');
@@ -9715,7 +9678,7 @@ sudoku_model.init = function(difficulty) {
 
 module.exports = sudoku_model;
 
-},{"./sudoku-generator.js":6}],8:[function(require,module,exports){
+},{"./sudoku-generator.js":5}],7:[function(require,module,exports){
 // sudoku_view
 
 var $ = require('jquery');
@@ -9790,7 +9753,7 @@ sudoku_view.validateEntry = function(e) {
 
 module.exports = sudoku_view;
 
-},{"./utilities.js":9,"jquery":2}],9:[function(require,module,exports){
+},{"./utilities.js":8,"jquery":2}],8:[function(require,module,exports){
 // utilities
 var $ = require('jquery');
 
@@ -9871,7 +9834,7 @@ utils.oneDigitNumericOnly = function(e) {
 
 module.exports = utils;
 
-},{"jquery":2}],10:[function(require,module,exports){
+},{"jquery":2}],9:[function(require,module,exports){
 this["Templates"] = this["Templates"] || {};
 
 this["Templates"]["sub-table-row"] = function template(locals) {
@@ -10499,4 +10462,4 @@ buf.push("</tr>");
 
 buf.push("</tbody></table>");}.call(this,"undefined" in locals_for_with?locals_for_with.undefined:typeof undefined!=="undefined"?undefined:undefined));;return buf.join("");
 };
-},{}]},{},[10,3,4,5,6,7,8,9]);
+},{}]},{},[9,3,4,5,6,7,8]);
