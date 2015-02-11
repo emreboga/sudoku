@@ -54,6 +54,12 @@ For certain functionality, third-party libraries has been used in the architectu
 4- Base and Table componetns from Pure-css library  
 
 ## Future Improvements
-Sudoku game has a solid infrastructure to improve and build upon. We can categorize these improvements in two.
+Sudoku game has a solid infrastructure to improve and build upon. However due to limited time, I wasn't able to add all the things I wanted to add. We can categorize these improvements in two topics.
 ### Infrastructure
-**CSS preprocessors:** Due to limited time, I wasn't able to add a CSS preprocessor the project infrastructure. There will certainly be a huge improvement by adding one.
+**CSS preprocessors:** A CSS preprocessor will certainly be a huge improvement in the project infrastructure. It will allow the developer more flexibility when writing CSS.
+**Resource minification:** JavaScript and CSS resources are currently not minified or uglified during build process. By adding this functionality there will be a considerable amount of performance improvement, especially in mobile devices with slower connections.
+**Data binding:** Jade templates used in the game don't have a direct data-binding to the model. The board is rendered on the page from scratch everytime a game starts. A data binding between templates and the model would allow to generate the html with the values as opposed to adding them later.
+### UI Design
+The simplistic approach demands the usage of less UI elements on the page. This has been the way of thinking during the development of the game. However there are still improvements without breaking this rule.  
+**All possible values:** Entering a number in mobile devices can be little time-consuming. To improve this we can show the user all possible values when clicked/tapped on a cell.  
+**Customizable difficulty levels:** Giving only three options for difficulty can become less challenging for the user after a certain time. We can provide a more customizable way of setting the difficulty, such as getting the number of empty cells from the user.  
