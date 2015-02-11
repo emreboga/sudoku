@@ -18,7 +18,14 @@
 }
 
 /* Smartphones */
-@media only screen and (max-width : 599px) {
+@media only screen and (max-width : 599px) and (orientation: portrait) {
+    .options {
+        width: 300px;
+        margin: 0px auto;
+        padding: 5px 0;
+    }
+}
+@media only screen and (max-width : 599px) and (orientation: landscape) {
     .options {
         width: 320px;
         margin: 0px auto;
