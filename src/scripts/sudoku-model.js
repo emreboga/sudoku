@@ -1,4 +1,5 @@
-// sudoku_model
+// Sudoku Model
+// Initiates and stores sudoku board data
 
 var generator = require('./sudoku-generator.js');
 

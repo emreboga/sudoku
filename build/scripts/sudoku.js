@@ -14162,7 +14162,8 @@ exports.rethrow = function rethrow(err, filename, lineno, str){
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"fs":1}],12:[function(require,module,exports){
-// sudoku_game
+// Sudoku Game
+// Starts a sudoku game with the selected difficulty
 
 var $ = require('jquery');
 var model = require('./sudoku-model.js');
@@ -14170,6 +14171,7 @@ var view = require('./sudoku-view.js');
 
 var sudoku_game = {};
 
+// Starts the game
 sudoku_game.start = function() {
     // initialize the view with a model
     view.init(model);
@@ -14177,6 +14179,7 @@ sudoku_game.start = function() {
     view.render();
 };
 
+// Handler for difficulty change
 $('.difficulty .option').click(function(e) {
     var $target = $(e.target),
         $sibling;
@@ -14201,13 +14204,14 @@ $('.difficulty .option').click(function(e) {
 sudoku_game.start();
 
 },{"./sudoku-model.js":14,"./sudoku-view.js":15,"jquery":10}],13:[function(require,module,exports){
-// sudoku_generator
+// Sudoku Generator
+// Generates a sudoku board by random-morphing from an existing one
 
 var utils = require('./utilities.js');
 
 var sudoku_generator = {};
 
-// base board to start the randomization
+// Base board to start the randomization
 sudoku_generator.baseBoard = [
     [1, 2, 3, 4, 5, 6, 7, 8, 9],
     [4, 5, 6, 7, 8, 9, 1, 2, 3],
@@ -14270,6 +14274,7 @@ sudoku_generator.newBoard = function(difficulty) {
     };
 };
 
+// Swaps two rows in a horizontal group of three subtables
 var swapRowsInGroup = function(board, groupIdx, rows) {
     var offset = groupIdx * 3,
         idx1 = rows[0] + offset,
@@ -14281,6 +14286,7 @@ var swapRowsInGroup = function(board, groupIdx, rows) {
     board[idx2] = swap;
 };
 
+// Swaps two columns in a vertical group of three subtables
 var swapColsInGroup = function(board, groupIdx, cols) {
     var offset = groupIdx * 3,
         idx1 = cols[0] + offset,
@@ -14294,6 +14300,7 @@ var swapColsInGroup = function(board, groupIdx, cols) {
     }
 };
 
+// Swaps all rows in two horizontal group of three subtables
 var swapRowsAmongGroups = function(board, groups) {
     var idx1 = groups[0] * 3,
         idx2 = groups[1] * 3,
@@ -14306,6 +14313,7 @@ var swapRowsAmongGroups = function(board, groups) {
     }
 };
 
+// Swaps all columns in two vertical group of three subtables
 var swapColsAmongGroups = function(board, groups) {
     var idx1 = groups[0] * 3,
         idx2 = groups[1] * 3,
@@ -14320,6 +14328,10 @@ var swapColsAmongGroups = function(board, groups) {
     }
 };
 
+// Sets the difficulty of a board by hiding a variable number of cell values
+// easy: Hide 27 cells (3 per row)
+// medium: Hide 36 cells (4 per row)
+// hard: Hide 45 cells (5 per row)
 var setDifficulty = function(board, difficulty) {
     // pick a certain number of random cells to hide from each row
     var count;
@@ -14337,6 +14349,8 @@ var setDifficulty = function(board, difficulty) {
             count = 3;
     }
 
+    // Randomly select rows in the difficulty amount
+    // To hide the value in the cell is set to zero and not rendered on the page
     for (var i = 0, l = board.length; i < l; i++) {
         var row = board[i];
         var toBeHidden = utils.getDistinctRandoms(row, count);
@@ -14355,7 +14369,8 @@ var setDifficulty = function(board, difficulty) {
 module.exports = sudoku_generator;
 
 },{"./utilities.js":16}],14:[function(require,module,exports){
-// sudoku_model
+// Sudoku Model
+// Initiates and stores sudoku board data
 
 var generator = require('./sudoku-generator.js');
 
@@ -14393,7 +14408,9 @@ sudoku_model.init = function(difficulty) {
 module.exports = sudoku_model;
 
 },{"./sudoku-generator.js":13}],15:[function(require,module,exports){
-// sudoku_view
+// Sudoku View
+// Initiates a Sudoku Model
+// Handles all user interaction and input validations
 
 var $ = require('jquery');
 var utils = require('./utilities.js');
@@ -14405,12 +14422,15 @@ var sudoku_view = {};
 
 sudoku_view.model = null;
 
+// Initiates a view with the specified model
 sudoku_view.init = function(model) {
     // set the model and re-set everything
     this.model = model;
     this.reset();
 };
 
+// Resets the view
+// This will re-initiate the model and build the board skeleton in DOM
 sudoku_view.reset = function() {
     // Initialize the model with the current difficulty level
     this.model.init(this.getDifficulty());
@@ -14418,27 +14438,41 @@ sudoku_view.reset = function() {
     $('.game').html(templates.table());
 };
 
+// Renders the view on the page
+// This operation will set the values from model.board on the board skeleton in DOM
 sudoku_view.render = function() {
     var board = this.model.board,
         cellValue,
         $cell;
+
+    // Iterate the board and set each value
     for (var i = 0, l = board.length; i < l; i++) {
         for (var k = 0, m = board[i].length; k < m; k++) {
             cellValue = board[i][k];
+            // Each cell in the board skeleton has a unique selector,
+            // which can be built from the coordinates of the cell in model.board
             $cell = $(utils.buildSelector(i, k));
             if (cellValue !== 0) {
+                // Set cell value only if not 0, which means an emoty cell
                 $cell.html(cellValue);
             } else {
+                // If the cell is empty, we listen for user input
                 $cell.keyup({'coors': {'x': i, 'y': k}, 'view': this}, this.validateEntry);
             }
         }
     }
+    // Listen to all keydowns in the game to avoid non-numeric and multi-digit entries
     $('.game').keydown(utils.oneDigitNumericOnly);
 };
 
+// Gets the difficulty from the options section of the page
 sudoku_view.getDifficulty = function() {
     var difficulty;
 
+    // Difficulty is determined from the selected option's text
+    // 'easy': 0
+    // 'medium': 1
+    // 'hard': 2
     switch ($('.difficulty .selected').val()) {
         case 'easy':
             difficulty = 0;
@@ -14456,6 +14490,7 @@ sudoku_view.getDifficulty = function() {
     return difficulty;
 };
 
+// Validates the entry by checking row, column and the subtable the cell belongs to
 sudoku_view.validateEntry = function(e) {
     var value = parseInt(e.target.value),
         view = e.data.view,
@@ -14472,33 +14507,38 @@ sudoku_view.validateEntry = function(e) {
             model.errorCount -= 1;
         }
     }
+    // Set the value in the table for both valid and invalid cases
     model.board[e.data.coors.x][e.data.coors.y] = value;
 
-    // check if board is completed succesfully
+    // Check if board is completed succesfully
     if (utils.validateCompletion(model)) {
-        // show success message
+        // Show success message
         view.showSuccess();
     }
 };
 
+// Creates a modal dialog for a success case
 sudoku_view.showSuccess = function() {
     var that = this;
     $('.success-dialog').dialog({
-        title: "Congratulations!",
+        title: 'Congratulations!',
         modal: true,
         draggable: false,
         resizable: false,
         position: ['center'],
         maxWidth: 200,
         maxHeight: 200,
-        dialogClass: "dialog-custom",
+        dialogClass: 'dialog-custom',
         buttons: {
             'New game?': function() {
+                // Reset and re-render the view if user wants another game
                 that.reset();
                 that.render();
+                // Close the dialog after setting up the new game
                 $(this).dialog('close');
             },
             'No, thanks!': function() {
+                // Close the dialog if user doesn't want a new game
                 $(this).dialog('close');
             }
         }
@@ -14508,31 +14548,40 @@ sudoku_view.showSuccess = function() {
 module.exports = sudoku_view;
 
 },{"../templates/compiled/templates.js":17,"./utilities.js":16,"jquery":10,"jquery-ui/dialog":4}],16:[function(require,module,exports){
-// utilities
+// Utility Functionalities
+
 var $ = require('jquery');
 
 var utils = {};
 
+// Builds a selector from the coordinates x and y.
+// Each cell in the board html has a unique selector,
+// which can be built from its coordinates in the board data.
 utils.buildSelector = function(x, y) {
     var selector = '.r-' + Math.floor(x / 3) + ' .st-' + Math.floor(y / 3) + ' .r-' + (x % 3) + ' .c-' + (y % 3);
     return selector;
 };
 
+// Gets a the specified number of random elements from an array
 utils.getDistinctRandoms = function(array, count) {
     var items = array.slice();
     var ret = [];
     if (items.length <= count) {
+        // If there is not sufficient items in the array, return the array itself
         ret = items;
     } else {
+        // Each randomly selected item is spliced from the array to exclude from the next pick
         for (var i = 0; i < count; i++) {
             ret.push(items.splice(Math.floor(Math.random() * items.length), 1)[0]);
         }
     }
+    // Return randomly selected items
     return ret;
 };
 
+// Validates a cell input by checking the row, the column and the subtable it belongs to
 utils.validateInput = function(value, coors, board) {
-    // check row
+    // Check row
     for (var i = 0; i < board[coors.x].length; i++) {
         if (i === coors.y) {
             continue;
@@ -14542,7 +14591,7 @@ utils.validateInput = function(value, coors, board) {
         }
     }
 
-    // check column
+    // Check column
     for (i = 0; i < board.length; i++) {
         if (i === coors.x) {
             continue;
@@ -14552,10 +14601,11 @@ utils.validateInput = function(value, coors, board) {
         }
     }
 
-    // check sub-table
-    // get sub talbes
+    // Check sub-table
+    // Get sub table's top-left coordinates
     var topLeft_x = Math.floor(coors.x / 3) * 3 + coors.x % 3;
     var topLeft_y = Math.floor(coors.y / 3) * 3 + coors.y % 3;
+    // Iterate the subtable for duplicate check
     for (i = topLeft_x; i < topLeft_x + 3; i++) {
         for (var k = topLeft_y; k < topLeft_y + 3; k++) {
             if (board[i][k] === value) {
@@ -14564,10 +14614,11 @@ utils.validateInput = function(value, coors, board) {
         }
     }
 
-    // no dups found
+    // Entry is valid
     return true;
 };
 
+// Keydown callback to avoid multi-digit and non-numeric entries
 utils.oneDigitNumericOnly = function(e) {
     e.originalEvent.returnValue = false;
     var key = e.keyCode,
@@ -14575,6 +14626,7 @@ utils.oneDigitNumericOnly = function(e) {
         isNumeric = $.isNumeric(value);
 
     if (!isNumeric) {
+        // We still need to check for tab, backspace, arrow keys etc. for non-numeric case
         if ((key >= 8 && key <= 27) || (key >= 33 && key <= 46) || (key >= 96 && key <= 105)) {
             e.originalEvent.returnValue = true;
         }
@@ -14586,17 +14638,24 @@ utils.oneDigitNumericOnly = function(e) {
     }
 };
 
+// Validates the specied model's board fror completion
+// There are two validation rules:
+// 1- No errors on the board
+// 2- Sum of all values in the board adds up to 405
 utils.validateCompletion = function(model) {
     var completed = false,
         sum = 0;
     if (model.errorCount === 0) {
-        // add up all values
+        // No erros on the board
+        // Add up all values for sum check
         for (var i = 0; i < 9; i++) {
             for (var k = 0; k < 9; k++) {
                 sum += model.board[i][k];
             }
         }
         if (sum === 405) {
+            // Sum of all values is 405
+            // Board is complete
             completed = true;
         }
     }

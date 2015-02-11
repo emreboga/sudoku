@@ -1,4 +1,5 @@
-// sudoku_game
+// Sudoku Game
+// Starts a sudoku game with the selected difficulty
 
 var $ = require('jquery');
 var model = require('./sudoku-model.js');
@@ -6,6 +7,7 @@ var view = require('./sudoku-view.js');
 
 var sudoku_game = {};
 
+// Starts the game
 sudoku_game.start = function() {
     // initialize the view with a model
     view.init(model);
@@ -13,6 +15,7 @@ sudoku_game.start = function() {
     view.render();
 };
 
+// Handler for difficulty change
 $('.difficulty .option').click(function(e) {
     var $target = $(e.target),
         $sibling;

@@ -1,10 +1,11 @@
-// sudoku_generator
+// Sudoku Generator
+// Generates a sudoku board by random-morphing from an existing one
 
 var utils = require('./utilities.js');
 
 var sudoku_generator = {};
 
-// base board to start the randomization
+// Base board to start the randomization
 sudoku_generator.baseBoard = [
     [1, 2, 3, 4, 5, 6, 7, 8, 9],
     [4, 5, 6, 7, 8, 9, 1, 2, 3],
@@ -67,6 +68,7 @@ sudoku_generator.newBoard = function(difficulty) {
     };
 };
 
+// Swaps two rows in a horizontal group of three subtables
 var swapRowsInGroup = function(board, groupIdx, rows) {
     var offset = groupIdx * 3,
         idx1 = rows[0] + offset,
@@ -78,6 +80,7 @@ var swapRowsInGroup = function(board, groupIdx, rows) {
     board[idx2] = swap;
 };
 
+// Swaps two columns in a vertical group of three subtables
 var swapColsInGroup = function(board, groupIdx, cols) {
     var offset = groupIdx * 3,
         idx1 = cols[0] + offset,
@@ -91,6 +94,7 @@ var swapColsInGroup = function(board, groupIdx, cols) {
     }
 };
 
+// Swaps all rows in two horizontal group of three subtables
 var swapRowsAmongGroups = function(board, groups) {
     var idx1 = groups[0] * 3,
         idx2 = groups[1] * 3,
@@ -103,6 +107,7 @@ var swapRowsAmongGroups = function(board, groups) {
     }
 };
 
+// Swaps all columns in two vertical group of three subtables
 var swapColsAmongGroups = function(board, groups) {
     var idx1 = groups[0] * 3,
         idx2 = groups[1] * 3,
@@ -117,6 +122,10 @@ var swapColsAmongGroups = function(board, groups) {
     }
 };
 
+// Sets the difficulty of a board by hiding a variable number of cell values
+// easy: Hide 27 cells (3 per row)
+// medium: Hide 36 cells (4 per row)
+// hard: Hide 45 cells (5 per row)
 var setDifficulty = function(board, difficulty) {
     // pick a certain number of random cells to hide from each row
     var count;
@@ -134,6 +143,8 @@ var setDifficulty = function(board, difficulty) {
             count = 3;
     }
 
+    // Randomly select rows in the difficulty amount
+    // To hide the value in the cell is set to zero and not rendered on the page
     for (var i = 0, l = board.length; i < l; i++) {
         var row = board[i];
         var toBeHidden = utils.getDistinctRandoms(row, count);

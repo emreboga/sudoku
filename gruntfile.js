@@ -2,8 +2,8 @@ module.exports = function(grunt) {
 
     // project configuration
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
 
+        // Module management
         browserify: {
             dist: {
                 files: {
@@ -17,6 +17,7 @@ module.exports = function(grunt) {
             }
         },
 
+        // CSS bundling
         concat: {
             css: {
                 src: 'src/styles/**/*.css',
@@ -24,6 +25,7 @@ module.exports = function(grunt) {
             }
         },
 
+        // Copying static resources/libraries
         copy: {
             main: {
                 files: [
@@ -33,6 +35,7 @@ module.exports = function(grunt) {
             }
         },
 
+        // Template compilation
         jade: {
             compile: {
                 options: {
@@ -48,6 +51,7 @@ module.exports = function(grunt) {
             }
         },
 
+        // Watching changes to trigger the matching task(s)
         watch: {
             grunt: {
                 files: ['./gruntfile.js']
