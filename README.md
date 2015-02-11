@@ -21,6 +21,7 @@ Users can enter numbers only in empty cells. When a user enters a number, the ga
 When a user enters all valid numbers and completes the board, the game will congratulate the user and give two options in a dialog:  
 1- Start a new game with the same difficulty.  
 2- Close the dialog and do not start a new game.  
+A game can also be completed by click on the 'Solution?' button.
 
 ## Design and Development
 The design and development process of Sudoku game is based on two principles:  
