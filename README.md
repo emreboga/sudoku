@@ -50,10 +50,16 @@ In order to build the source code under src folder, you need to:
 To deploy the built resources, an NPM script is added to run a 'git subtree' commmand. This command rebases the gh-pages branch (where the live site is served from) from the specified deployment folder. To run this command you can type 'npm run deploy' while in the root folder in master branch.
 ### Architecture
 An Model-View approach is adopted when building the game.
+#### Game
+Sudoku-game.js defines a module that acts like a controller (or router in Backbone) to start the game when user navigates to the page. Game module also hooks up to the difficulty change to re-start the game when user picks another level of difficulty.
 #### Model
 Sudoku-model.js file defines the model of this architecture, which initiates and stores sudoku board data.
 #### View
 Sudoku-view.js file defines the view of this architecture, which handles all user interaction and input validations.
+#### Generator
+Sudoku-generator.js file defines a standalone module that generates Sudoku board variations from a base board with a given difficulty level. This component is leveraged by Sudoku-model to generate boards on demand.
+#### Utilities
+Utilities.js file defines a module which handles all the common and non-type-dependent tasks. Such tasks vary from validating a Sudoku board to picking random items from an array or numbers.
 #### External Libraries
 For certain functionality, third-party libraries has been used in the architecture. These are:  
 1- jQuery  
