@@ -9486,101 +9486,49 @@ exports.rethrow = function rethrow(err, filename, lineno, str){
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"fs":1}],5:[function(require,module,exports){
-// sudoku-model.js
-
-var generator = require('./sudoku_generator.js');
-
-var sudoku_model = {};
-
-// full board to validate user input
-sudoku_model.solution = [];
-// Unresolved board that will be modified by the user
-sudoku_model.board = [];
-// Track whether the board has any invalid entries
-sudoku_model.errorCount = 0;
-
-sudoku_model.init = function() {
-    var newBoard = generator.newBoard();
-    this.board = newBoard.unresolved;
-    this.solution = newBoard.solution;
-};
-
-module.exports = sudoku_model;
-
-},{"./sudoku_generator.js":8}],6:[function(require,module,exports){
-// sudoku-view.js
-
-var $ = require('jquery');
-var utils = require('./utilities.js');
-
-var sudoku_view = {};
-
-sudoku_view.model = null;
-
-sudoku_view.init = function(model) {
-    this.model = model;
-    if (this.model.board.length === 0) {
-        this.model.init();
-    }
-};
-
-sudoku_view.render = function() {
-    var board = this.model.board,
-        cellValue,
-        $cell;
-    for (var i = 0, l = board.length; i < l; i++) {
-        for (var k = 0, m = board[i].length; k < m; k++) {
-            cellValue = board[i][k];
-            $cell = $(utils.buildSelector(i, k));
-            if (cellValue !== 0) {
-                $cell.html(cellValue);
-            } else {
-                $cell.keyup({'coors': {'x': i, 'y': k}, 'view': this}, this.validateEntry);
-            }
-        }
-    }
-    $('.main').keydown(utils.oneDigitNumericOnly);
-};
-
-sudoku_view.validateEntry = function(e) {
-    var value = parseInt(e.target.value),
-        model = e.data.view.model;
-    // validate the input
-    if (!utils.validateInput(value, e.data.coors, model.board)) {
-        if (e.target.style.border !== '1px solid red') {
-            e.target.style.border = '1px solid red';
-            model.errorCount += 1;
-        }
-    } else {
-        if (e.target.style.border !== '') {
-            e.target.style.border = '';
-            model.errorCount -= 1;
-        }
-    }
-    alert(model.errorCount);
-    model.board[e.data.coors.x][e.data.coors.y] = value;
-};
-
-module.exports = sudoku_view;
-
-},{"./utilities.js":9,"jquery":2}],7:[function(require,module,exports){
-// sudoku_game.js
+// sudoku_game
 
 var $ = require('jquery');
 var model = require('./sudoku-model.js');
 var view = require('./sudoku-view.js');
 var templates = require('../templates/compiled/templates.js').Templates;
 
-// generate the html table for the board
-$('.main').html(templates.table());
+var sudoku_game = {};
 
-// initialize the view with a model
-view.init(model);
-// render the view to start the game
-view.render();
+sudoku_game.start = function() {
+    // generate the html table for the board
+    $('.game').html(templates.table());
+    // initialize the view with a model
+    view.init(model);
+    // render the view to start the game
+    view.render();
+};
 
-},{"../templates/compiled/templates.js":10,"./sudoku-model.js":5,"./sudoku-view.js":6,"jquery":2}],8:[function(require,module,exports){
-// sudoku_generator.js
+$('.difficulty .option').click(function(e) {
+    var $target = $(e.target),
+        $sibling;
+    // if the options hasn't been selected already
+    if (!$target.hasClass('selected')) {
+        // select the new option
+        $target.addClass('selected');
+        // check each sibling
+        $target.siblings().each(function() {
+            $sibling = $(this);
+            // and remove the class if previously selected
+            if ($sibling.hasClass('selected')) {
+                $sibling.removeClass('selected');
+            }
+        });
+        // re-start the game with the enw difficulty level
+        sudoku_game.start();
+    }
+});
+
+// Start the game
+sudoku_game.start();
+
+},{"../templates/compiled/templates.js":10,"./sudoku-model.js":7,"./sudoku-view.js":8,"jquery":2}],6:[function(require,module,exports){
+// sudoku_generator
 
 var utils = require('./utilities.js');
 
@@ -9607,7 +9555,7 @@ sudoku_generator.baseBoard = [
 // 2- Swapping two random columns in each of three groups (3^3 possibilities)
 // 3- Swapping all rows in two random groups (3^1 possibilities)
 // 4- Swapping all columns in two random groups (3^1 possibilities)
-sudoku_generator.newBoard = function() {
+sudoku_generator.newBoard = function(difficulty) {
     var newBoard = [],
         solution = [];
 
@@ -9640,7 +9588,7 @@ sudoku_generator.newBoard = function() {
     // Medium:  40 remaining cells
     // Hard:    30 remaining cells
     // return the new board
-    setDifficulty(newBoard, 'easy');
+    setDifficulty(newBoard, difficulty);
 
     // return the board with the solution
     return {
@@ -9703,13 +9651,13 @@ var setDifficulty = function(board, difficulty) {
     // pick a certain number of random cells to hide from each row
     var count;
     switch (difficulty) {
-        case 'easy':
+        case 0:
             count = 3;
             break;
-        case 'medium':
+        case 1:
             count = 4;
             break;
-        case 'hard':
+        case 2:
             count = 5;
             break;
         default:
@@ -9733,8 +9681,117 @@ var setDifficulty = function(board, difficulty) {
 
 module.exports = sudoku_generator;
 
-},{"./utilities.js":9}],9:[function(require,module,exports){
-// utilities.js
+},{"./utilities.js":9}],7:[function(require,module,exports){
+// sudoku_model
+
+var generator = require('./sudoku-generator.js');
+
+var sudoku_model = {};
+
+// full board to validate user input
+sudoku_model.solution = [];
+
+// Unresolved board that will be modified by the user
+sudoku_model.board = [];
+
+// Difficulty level
+// 0: Easy
+// 1: Medium
+// 2: Hard
+sudoku_model.difficulty = 0;
+
+// Track whether the board has any invalid entries
+sudoku_model.errorCount = 0;
+
+// Initialize the model
+// @difficulty (number): Level of difficulty. Easy: 0, Medium: 1 and Hard: 2 
+sudoku_model.init = function(difficulty) {
+    // get a new board from the generator
+    var newBoard = generator.newBoard(difficulty);
+    // set the unresolved and solution boards
+    this.board = newBoard.unresolved;
+    this.solution = newBoard.solution;
+};
+
+module.exports = sudoku_model;
+
+},{"./sudoku-generator.js":6}],8:[function(require,module,exports){
+// sudoku_view
+
+var $ = require('jquery');
+var utils = require('./utilities.js');
+
+var sudoku_view = {};
+
+sudoku_view.model = null;
+
+sudoku_view.init = function(model) {
+    this.model = model;
+
+    // Initialize the model with the current difficulty level
+    this.model.init(this.getDifficulty());
+};
+
+sudoku_view.render = function() {
+    var board = this.model.board,
+        cellValue,
+        $cell;
+    for (var i = 0, l = board.length; i < l; i++) {
+        for (var k = 0, m = board[i].length; k < m; k++) {
+            cellValue = board[i][k];
+            $cell = $(utils.buildSelector(i, k));
+            if (cellValue !== 0) {
+                $cell.html(cellValue);
+            } else {
+                $cell.keyup({'coors': {'x': i, 'y': k}, 'view': this}, this.validateEntry);
+            }
+        }
+    }
+    $('.game').keydown(utils.oneDigitNumericOnly);
+};
+
+sudoku_view.getDifficulty = function() {
+    var difficulty;
+
+    switch ($('.difficulty .selected').val()) {
+        case 'easy':
+            difficulty = 0;
+            break;
+        case 'medium':
+            difficulty = 1;
+            break;
+        case 'hard':
+            difficulty = 2;
+            break;
+        default:
+            difficulty = 0;
+    }
+
+    return difficulty;
+};
+
+sudoku_view.validateEntry = function(e) {
+    var value = parseInt(e.target.value),
+        model = e.data.view.model;
+    // validate the input
+    if (!utils.validateInput(value, e.data.coors, model.board)) {
+        if (e.target.style.border !== '1px solid red') {
+            e.target.style.border = '1px solid red';
+            model.errorCount += 1;
+        }
+    } else {
+        if (e.target.style.border !== '') {
+            e.target.style.border = '';
+            model.errorCount -= 1;
+        }
+    }
+    model.board[e.data.coors.x][e.data.coors.y] = value;
+};
+
+module.exports = sudoku_view;
+
+},{"./utilities.js":9,"jquery":2}],9:[function(require,module,exports){
+// utilities
 var $ = require('jquery');
 
 var utils = {};
@@ -9811,7 +9868,6 @@ utils.oneDigitNumericOnly = function(e) {
         }
     }
 };
-
 
 module.exports = utils;
 

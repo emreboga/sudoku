@@ -1,4 +1,4 @@
-// utilities.js
+// utilities
 var $ = require('jquery');
 
 var utils = {};
@@ -75,6 +75,5 @@ utils.oneDigitNumericOnly = function(e) {
         }
     }
 };
-
 
 module.exports = utils;

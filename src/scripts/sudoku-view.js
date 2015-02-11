@@ -1,4 +1,4 @@
-// sudoku-view.js
+// sudoku_view
 
 var $ = require('jquery');
 var utils = require('./utilities.js');
@@ -9,9 +9,9 @@ sudoku_view.model = null;
 
 sudoku_view.init = function(model) {
     this.model = model;
-    if (this.model.board.length === 0) {
-        this.model.init();
-    }
+
+    // Initialize the model with the current difficulty level
+    this.model.init(this.getDifficulty());
 };
 
 sudoku_view.render = function() {
@@ -29,7 +29,27 @@ sudoku_view.render = function() {
             }
         }
     }
-    $('.main').keydown(utils.oneDigitNumericOnly);
+    $('.game').keydown(utils.oneDigitNumericOnly);
+};
+
+sudoku_view.getDifficulty = function() {
+    var difficulty;
+
+    switch ($('.difficulty .selected').val()) {
+        case 'easy':
+            difficulty = 0;
+            break;
+        case 'medium':
+            difficulty = 1;
+            break;
+        case 'hard':
+            difficulty = 2;
+            break;
+        default:
+            difficulty = 0;
+    }
+
+    return difficulty;
 };
 
 sudoku_view.validateEntry = function(e) {

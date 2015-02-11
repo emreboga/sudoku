@@ -1,4 +1,4 @@
-// sudoku_generator.js
+// sudoku_generator
 
 var utils = require('./utilities.js');
 
@@ -25,7 +25,7 @@ sudoku_generator.baseBoard = [
 // 2- Swapping two random columns in each of three groups (3^3 possibilities)
 // 3- Swapping all rows in two random groups (3^1 possibilities)
 // 4- Swapping all columns in two random groups (3^1 possibilities)
-sudoku_generator.newBoard = function() {
+sudoku_generator.newBoard = function(difficulty) {
     var newBoard = [],
         solution = [];
 
@@ -58,7 +58,7 @@ sudoku_generator.newBoard = function() {
     // Medium:  40 remaining cells
     // Hard:    30 remaining cells
     // return the new board
-    setDifficulty(newBoard, 'easy');
+    setDifficulty(newBoard, difficulty);
 
     // return the board with the solution
     return {
@@ -121,13 +121,13 @@ var setDifficulty = function(board, difficulty) {
     // pick a certain number of random cells to hide from each row
     var count;
     switch (difficulty) {
-        case 'easy':
+        case 0:
             count = 3;
             break;
-        case 'medium':
+        case 1:
             count = 4;
             break;
-        case 'hard':
+        case 2:
             count = 5;
             break;
         default:
