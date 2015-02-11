@@ -31,5 +31,11 @@ A complete build system with easy deployment: Grunt.js is used for the build sys
 Grunt.js gives us the flexibility around tasks. Each task is run during the build process to deploy to the build folder. These tasks are specific to the platform technologies chosen. You can find detailed informtaion for these technologies, reasonings behind them and trade-offs under the each topic below.
 #### Browserify
 Resolves the dependencies between modules and produces a bundle accordingly. The bundle is deployed under build/scripts for distribution.  
-
 #### Concat
+Bundles the specified CSS files into one file and deploys under build/styles folder. There is definitely a possible improvent in the CSS part of the build system by using preprocessors, such as less or sass.
+#### Copy
+Copies the static files to the build folder. This is only for the skeleton html file (index.html) and the Jade runtime (jade-runtime.js).
+#### Jade
+Compiles the jade tempplates to JavaScript and copies to the templates/compiled directory in the source tree. These compiled files are then bundled with the rest of the JavaScript files by browserify.
+#### Watch
+Watches for any changes in the source tree to re-run the build. This tasks is for convenience and faster development.  
