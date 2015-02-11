@@ -24,8 +24,8 @@ When a user enters all valid numbers and completes the board, the game will cong
 
 ## Design and Development
 The design and development process of Sudoku game is based on two principles:  
-A simplistic UI design approach: This approach is influenced by the black/white theming of Uber.com. The board background is black. Texts and boarders and white. This design gives an easy yet elegant feeling to the game.  
-A complete build system with easy deployment: Grunt.js is used for the build system. This gives us a configurable build system around customizable tasks. You can find more information on these tasks below under 'Build' section.
+**Simplistic UI design approach:** This approach is influenced by the black/white theming of Uber.com. The board background is black. Texts and boarders and white. This design gives an easy yet elegant feeling to the game.  
+**Complete build system with easy deployment:** Grunt.js is used for the build system. This gives us a configurable build system around customizable tasks. You can find more information on these tasks below under 'Build' section.
 
 ### Build Platform
 Grunt.js gives us the flexibility around tasks. Each task is run during the build process to deploy to the build folder. These tasks are specific to the platform technologies chosen. You can find detailed informtaion for these technologies, reasonings behind them and trade-offs under the each topic below.
@@ -52,3 +52,8 @@ For certain functionality, third-party libraries has been used in the architectu
 2- jQuery UI  
 3- Jade Client Runtime  
 4- Base and Table componetns from Pure-css library  
+
+## Future Improvements
+Sudoku game has a solid infrastructure to improve and build upon. We can categorize these improvements in two.
+### Infrastructure
+**CSS preprocessors:** Due to limited time, I wasn't able to add a CSS preprocessor the project infrastructure. There will certainly be a huge improvement by adding one.
