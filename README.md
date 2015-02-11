@@ -40,7 +40,8 @@ Copies the static files to the build folder. This is only for the skeleton html 
 Compiles the jade templates to JavaScript and copies to the templates/compiled directory in the source tree. These compiled files are then bundled with the rest of the JavaScript files by browserify.
 #### Watch
 Watches for any changes in the source tree to re-run the build. This tasks is for convenience and faster development.  
-
+#### Deployment
+To deploy the built resources, an NPM script is added to run a 'git subtree' commmand. This command rebases the gh-pages branch (where the live site is served from) from the specified deployment folder.
 ### Architecture
 An Model-View approach is adopted when building the game.
 #### Model
