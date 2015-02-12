@@ -14475,7 +14475,7 @@ sudoku_view.getDifficulty = function() {
     // 'easy': 0
     // 'medium': 1
     // 'hard': 2
-    switch ($('.difficulty .selected').val()) {
+    switch ($('.difficulty .selected').html()) {
         case 'easy':
             difficulty = 0;
             break;
